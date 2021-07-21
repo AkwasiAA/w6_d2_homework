@@ -5,13 +5,82 @@ const Park = function(name, ticket_price){
 
 }
 
-Park.prototype.addDinosaur = function(dinosaur){
+Park.prototype.add = function(dinosaur){
     this.dinosaurs.push(dinosaur);
 }
 
-Park.prototype.removeDinosaur = function(dinosaur){
-    this.dinosaurs.pop(dinosaur);
+Park.prototype.remove = function(dinosaur){
+    const index = this.dinosaurs.indexOf(dinosaur);
+    this.dinosaurs.splice(index, 1);
 }
 
+Park.prototype.findMostAttractiveDinosaur = function(){
+    let mostAttractiveDino = this.dinosaurs[0];
+
+    for(const dino of this.dinosaurs) {
+        if (dino.guestsAttractedPerDay > mostAttractiveDino.guestsAttractedPerDay) {
+            mostAttractiveDino = dino;
+        }
+    }
+
+    return mostAttractiveDino;
+}
+
+Park.prototype.findBySpecies = function(species){
+    const foundDinosaurs = [];
+    
+    for (const dinosaur of this.dinosaurs) {
+        if (dinosaur.species === species) {
+            foundDinosaurs.push(dinosaur);
+        }
+    }
+
+    return foundDinosaurs;
+}
+
+Park.prototype.calculateAverageVisitorsPerDay = function(){
+    let averageDailyVisitors = 0;
+
+    for (const dinosaur of this.dinosaurs) {
+        averageDailyVisitors += dinosaur.guestsAttractedPerDay;
+    }
+
+    return averageDailyVisitors;
+}
+
+Park.prototype.calculateAverageVisitorsPerYear = function(){
+    return this.calculateAverageVisitorsPerDay() * 365;
+}
+
+Park.prototype.calculateAverageYearlyRevenue = function(){
+    return this.ticket_price * this.calculateAverageVisitorsPerYear();
+}
+
+Park.prototype.removeBySpecies = function (species) {
+    const newDinosaurs = [];
+  
+    for (const dinosaur of this.dinosaurs) {
+      if (dinosaur.species !== species) {
+        newDinosaurs.push(dinosaur);
+      }
+    }
+  
+    this.dinosaurs = newDinosaurs;
+}
+
+Park.prototype.numberOfDinosaursByDiet = function () {
+    const numberOfDinosaursByDiet = {};
+  
+    for (const dinosaur of this.dinosaurs) {
+      if (numberOfDinosaursByDiet[dinosaur.diet]) {
+        numberOfDinosaursByDiet[dinosaur.diet] += 1;
+      }
+      else {
+        numberOfDinosaursByDiet[dinosaur.diet] = 1;
+      }
+    }
+  
+    return numberOfDinosaursByDiet;
+}
 
 module.exports = Park;
